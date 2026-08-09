@@ -13,6 +13,7 @@ Unreleased
   - uvicorn to v0.52.1
   - python-multipart to v0.0.32
   - faster-whisper to v1.2.1
+  - tqdm to v4.70.0
 
 [1.9.1] (2025-07-01)
 --------------------
