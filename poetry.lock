@@ -846,20 +846,19 @@ standard-no-fastapi-cloud-cli = ["email-validator (>=2.0.0)", "fastapi-cli[stand
 
 [[package]]
 name = "faster-whisper"
-version = "1.1.1"
+version = "1.2.1"
 description = "Faster Whisper transcription with CTranslate2"
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "faster-whisper-1.1.1.tar.gz", hash = "sha256:50d27571970c1be0c2b2680a2593d5d12f9f5d2f10484f242a1afbe7cb946604"},
-    {file = "faster_whisper-1.1.1-py3-none-any.whl", hash = "sha256:5808dc334fb64fb4336921450abccfe5e313a859b31ba61def0ac7f639383d90"},
+    {file = "faster_whisper-1.2.1-py3-none-any.whl", hash = "sha256:79a66ad50688c0b794dd501dc340a736992a6342f7f95e5811be60b5224a26a7"},
 ]
 
 [package.dependencies]
 av = ">=11"
 ctranslate2 = ">=4.0,<5"
-huggingface-hub = ">=0.13"
+huggingface-hub = ">=0.21"
 onnxruntime = ">=1.14,<2"
 tokenizers = ">=0.13,<1"
 tqdm = "*"
@@ -5757,4 +5756,4 @@ cuda = ["torch", "torchaudio"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10,<3.14"
-content-hash = "c096a6ba4fa1e16f7dbe2b86649ae9b1142309fc14978f4e9e37405780f1695a"
+content-hash = "ced9c7e0848331572aea6c406965861283d175df6e5f4327f368f8d1b7a8792a"
