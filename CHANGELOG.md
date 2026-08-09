@@ -4,6 +4,20 @@ Changelog
 Unreleased
 ----------
 
+### Changed
+
+- Upgraded
+  - Python to v3.13
+  - Poetry to v2.4.1
+  - fastapi to v0.141.1
+  - uvicorn to v0.52.1
+  - python-multipart to v0.0.32
+  - faster-whisper to v1.2.1
+  - tqdm to v4.70.0
+  - llvmlite to v0.48.0
+  - numba to v0.66.0
+  - whisperx to v3.4.5
+
 [1.9.1] (2025-07-01)
 --------------------
 
