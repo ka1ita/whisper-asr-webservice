@@ -3,8 +3,6 @@
 ![Build](https://img.shields.io/github/actions/workflow/status/ahmetoner/whisper-asr-webservice/docker-publish.yml.svg)
 ![Licence](https://img.shields.io/github/license/ahmetoner/whisper-asr-webservice.svg)
 
-> 🚀 **Try Speech Box Desktop App | Offline, multi-language desktop transcriptions**: [https://speechbox.gumroad.com/l/desktop-app](https://speechbox.gumroad.com/l/desktop-app)
-
 # Whisper ASR Box
 
 Whisper ASR Box is a general-purpose speech recognition toolkit. Whisper Models are trained on a large dataset of diverse audio and is also a multitask model that can perform multilingual speech recognition as well as speech translation and language identification.
