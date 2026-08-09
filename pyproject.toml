@@ -6,7 +6,7 @@ requires-python = ">=3.10,<3.14"
 dependencies = [
     "fastapi (>=0.141.1)",
     "uvicorn[standard] (>=0.52.1)",
-    "python-multipart (>=0.0.20)",
+    "python-multipart (>=0.0.32)",
     "ffmpeg-python (>=0.2.0)",
     "numpy (>=2.2.6)",
     "openai-whisper (>=20250625)",
