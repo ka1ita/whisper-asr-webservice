@@ -9,6 +9,7 @@ Unreleased
 - Upgraded
   - Python to v3.13
   - Poetry to v2.4.1
+  - fastapi to v0.141.1
 
 [1.9.1] (2025-07-01)
 --------------------
