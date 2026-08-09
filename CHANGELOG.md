@@ -16,6 +16,7 @@ Unreleased
   - tqdm to v4.70.0
   - llvmlite to v0.48.0
   - numba to v0.66.0
+  - whisperx to v3.4.5
 
 [1.9.1] (2025-07-01)
 --------------------
