@@ -6,8 +6,9 @@ Unreleased
 
 ### Changed
 
+- Upgrade CUDA image to 12.9.2-base-ubuntu24.04
 - Upgraded
-  - Python to v3.13
+  - Python to v3.12
   - Poetry to v2.4.1
   - fastapi to v0.141.1
   - uvicorn to v0.52.1

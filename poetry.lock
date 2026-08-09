@@ -7485,4 +7485,4 @@ cuda = ["torch", "torchaudio"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10,<3.14"
-content-hash = "b3f508bd84f5ca30c6444ec50571b16c209bd73856129ed3ae761f7ec40246e2"
+content-hash = "c73f0805a3c42297a1925bb9f0d216e15217ad2cc2678ffaf4b05d1467884ed7"
