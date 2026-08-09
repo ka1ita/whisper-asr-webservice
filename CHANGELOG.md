@@ -12,6 +12,7 @@ Unreleased
   - fastapi to v0.141.1
   - uvicorn to v0.52.1
   - python-multipart to v0.0.32
+  - faster-whisper to v1.2.1
 
 [1.9.1] (2025-07-01)
 --------------------
