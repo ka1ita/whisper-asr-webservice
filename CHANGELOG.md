@@ -6,7 +6,7 @@ Unreleased
 
 ### Changed
 
-- Upgrade CUDA image to 12.9.2-base-ubuntu24.04
+- Upgrade CUDA image to 12.9.2-cudnn-runtime-ubuntu24.04
 - Upgraded
   - Python to v3.12
   - Poetry to v2.4.1
