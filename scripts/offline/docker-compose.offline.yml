@@ -1,0 +1,22 @@
+version: "3.4"
+
+# Compose file for the isolated server. Uses the pre-loaded image produced by
+# build-offline-image.sh (docker load -i <tar> first) instead of building from source,
+# since the isolated server has no internet access.
+#
+# Deliberately does not mount the cache-whisper volume that docker-compose.yml uses for
+# local dev - the models are already baked into the image at /root/.cache, and mounting an
+# empty named volume over that path on a host where it was created previously (e.g. by an
+# earlier plain docker run) would shadow them. See README.md for details.
+#
+# Edit ASR_ENGINE / ASR_MODEL below to match one of the models baked in by warmup_models.py.
+services:
+  whisper-asr-webservice:
+    image: whisper-asr-webservice:offline-preloaded
+    environment:
+      - ASR_ENGINE=gigaam
+      - ASR_MODEL=v3_e2e_rnnt
+      - HF_TOKEN=${HF_TOKEN:-}
+      - ASR_REQUEST_LOGGING=true
+    ports:
+      - "9000:9000"

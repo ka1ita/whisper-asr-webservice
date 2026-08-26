@@ -57,4 +57,4 @@ max_speakers: null
 output_format: "txt"
 
 # HTTP request timeout in seconds (transcription can take a while on CPU).
-request_timeout_seconds: 1200
+request_timeout_seconds: 12000
