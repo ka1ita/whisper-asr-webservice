@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# Starts whisper-asr-webservice via docker compose, waits for it to become ready,
-# rebuilds the client image only if client/ has changed (see rebuild-client.sh), then
-# runs the sample client (docker-compose.yml "client" service) against it.
+# Starts whisper-asr-webservice via docker compose (using whatever images already exist —
+# run ./scripts/docker-rebuild.sh first to build/refresh them), waits for it to become ready,
+# then runs the sample client (docker-compose.yml "client" service) against it.
 #
 # Usage:
-#   ./scripts/start-docker.sh            # CPU (docker-compose.yml)
-#   ./scripts/start-docker.sh gpu        # GPU (docker-compose.gpu.yml)
+#   ./scripts/docker-start.sh            # CPU (docker-compose.yml)
+#   ./scripts/docker-start.sh gpu        # GPU (docker-compose.gpu.yml)
 #
 # HF_TOKEN and other overrides: copy .env.example to .env and edit it first.
 set -euo pipefail
@@ -28,7 +28,7 @@ if [[ ! -f .env && -f .env.example ]]; then
 fi
 
 echo "Starting ${service} ..."
-docker compose -f "$compose_file" up -d --build "$service"
+docker compose -f "$compose_file" up -d "$service"
 
 echo "Waiting for ${service} to become ready..."
 for _ in $(seq 1 60); do
@@ -38,8 +38,6 @@ for _ in $(seq 1 60); do
   fi
   sleep 5
 done
-
-"$repo_root/scripts/rebuild-client.sh" "$arg"
 
 echo "Running client against ${service} ..."
 docker compose -f "$compose_file" run --rm client

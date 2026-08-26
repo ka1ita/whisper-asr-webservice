@@ -7,8 +7,8 @@
 # `docker compose up whisper-asr-webservice`) at the server_url configured in client/config.yaml.
 #
 # Usage:
-#   ./scripts/start-client.sh                          # uses client/config.yaml
-#   ./scripts/start-client.sh --config other.yaml       # extra args forwarded as-is
+#   ./scripts/python-start.sh                          # uses client/config.yaml
+#   ./scripts/python-start.sh --config other.yaml       # extra args forwarded as-is
 set -euo pipefail
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
