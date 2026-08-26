@@ -49,5 +49,8 @@ public
 # Local cache of the client/ content hash used by scripts/rebuild-client.sh|ps1
 /client/.docker-build-hash
 
+# Local cache of client/requirements.txt hash used by scripts/start-client.sh|ps1
+/client/.venv/.requirements.hash
+
 # Local secrets (copy .env.example -> .env)
 /.env

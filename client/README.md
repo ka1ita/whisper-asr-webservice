@@ -11,6 +11,16 @@ python -m venv .venv && source .venv/bin/activate   # optional
 pip install -r requirements.txt
 ```
 
+Or skip the manual venv/install steps with `./scripts/start-client.sh` (`.ps1` on Windows,
+run from the repo root) — it creates/reuses `client/.venv`, (re)installs
+`client/requirements.txt` only when it has changed, and runs the client. It's the fastest way
+to iterate locally (no Docker build/startup):
+
+```shell
+./scripts/start-client.sh
+./scripts/start-client.sh --config other.yaml   # extra args are forwarded
+```
+
 Make sure a whisper-asr-webservice instance is running (see the repo root [README.md](../README.md)),
 e.g.:
 
