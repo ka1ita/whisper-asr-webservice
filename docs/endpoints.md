@@ -14,23 +14,25 @@ There are 2 endpoints available:
   - **translate**: will provide an English transcript no matter which language was spoken.
 - Files are automatically converted with FFmpeg.
   - Full list of supported [audio](https://ffmpeg.org/general.html#Audio-Codecs) and [video](https://ffmpeg.org/general.html#Video-Codecs) formats.
-- You can enable word level timestamps output by `word_timestamps` parameter
+- You can enable word level timestamps output by `word_timestamps` parameter (Faster Whisper and GigaAM).
 - You can Enable the voice activity detection (VAD) to filter out parts of the audio without speech  by `vad_filter` parameter (only with `Faster Whisper` for now).
+- The GigaAM engine only supports `transcribe` (not `translate`) and, for its non-multilingual models
+  (the default), only Russian audio.
 
 ### Request URL Query Params
 
-| Name            | Values                                         | Description                                                    |
-|-----------------|------------------------------------------------|----------------------------------------------------------------|
-| audio_file      | File                                           | Audio or video file to transcribe                              |
-| output          | `text` (default), `json`, `vtt`, `srt`, `tsv` | Output format                                                  |
-| task            | `transcribe`, `translate`                      | Task type - transcribe in source language or translate to English |
-| language        | `en` (default is auto recognition)             | Source language code (see supported languages)                 |
-| word_timestamps | false (default)                                | Enable word-level timestamps (Faster Whisper only)             |
-| vad_filter      | false (default)                                | Enable voice activity detection filtering (Faster Whisper only) |
-| encode          | true (default)                                 | Encode audio through FFmpeg before processing                  |
-| diarize         | false (default)                                | Enable speaker diarization (WhisperX only)                     |
-| min_speakers    | null (default)                                 | Minimum number of speakers for diarization (WhisperX only)     |
-| max_speakers    | null (default)                                 | Maximum number of speakers for diarization (WhisperX only)     |
+| Name            | Values                                         | Description                                                            |
+|-----------------|-------------------------------------------------|-------------------------------------------------------------------------|
+| audio_file      | File                                             | Audio or video file to transcribe                                       |
+| output          | `text` (default), `json`, `vtt`, `srt`, `tsv`    | Output format                                                            |
+| task            | `transcribe`, `translate`                        | Task type - transcribe in source language or translate to English       |
+| language        | `en` (default is auto recognition)               | Source language code (see supported languages)                          |
+| word_timestamps | false (default)                                  | Enable word-level timestamps (Faster Whisper and GigaAM only)           |
+| vad_filter      | false (default)                                  | Enable voice activity detection filtering (Faster Whisper only)         |
+| encode          | true (default)                                   | Encode audio through FFmpeg before processing                           |
+| diarize         | false (default)                                  | Enable speaker diarization (WhisperX and GigaAM only)                   |
+| min_speakers    | null (default)                                   | Minimum number of speakers for diarization (WhisperX and GigaAM only)   |
+| max_speakers    | null (default)                                   | Maximum number of speakers for diarization (WhisperX and GigaAM only)   |
 
 Example request with cURL
 

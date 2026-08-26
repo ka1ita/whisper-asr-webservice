@@ -33,7 +33,7 @@ encode: true
 task: "transcribe"
 
 # ISO-639-1 language code (e.g. "en"), or null to auto-detect.
-language: null
+language: ru
 
 # Optional text to bias/prime the model with.
 initial_prompt: null
@@ -45,7 +45,7 @@ vad_filter: false
 word_timestamps: false
 
 # Speaker diarization (whisperx engine only; also requires HF_TOKEN set on the server).
-diarize: false
+diarize: true
 
 # Optional min/max number of speakers to hint the diarization pipeline with (whisperx only).
 min_speakers: null
@@ -57,4 +57,4 @@ max_speakers: null
 output_format: "txt"
 
 # HTTP request timeout in seconds (transcription can take a while on CPU).
-request_timeout_seconds: 600
+request_timeout_seconds: 1200

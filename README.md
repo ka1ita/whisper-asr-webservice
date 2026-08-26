@@ -16,6 +16,7 @@ Current release (v1.10.0) supports following whisper models:
 - [openai/whisper](https://github.com/openai/whisper)@[v20250625](https://github.com/openai/whisper/releases/tag/v20250625)
 - [SYSTRAN/faster-whisper](https://github.com/SYSTRAN/faster-whisper)@[v1.2.1](https://github.com/SYSTRAN/faster-whisper/releases/tag/v1.2.1)
 - [whisperX](https://github.com/m-bain/whisperX)@[v3.4.5](https://github.com/m-bain/whisperX/releases/tag/v3.4.5)
+- [GigaAM](https://github.com/salute-developers/GigaAM) (Russian-focused, with multilingual model variants)
 
 ## Quick Usage
 
@@ -49,11 +50,11 @@ docker run -d -p 9000:9000 \
 
 ## Key Features
 
-- Multiple ASR engines support (OpenAI Whisper, Faster Whisper, WhisperX)
+- Multiple ASR engines support (OpenAI Whisper, Faster Whisper, WhisperX, GigaAM)
 - Multiple output formats (text, JSON, VTT, SRT, TSV)
 - Word-level timestamps support
 - Voice activity detection (VAD) filtering
-- Speaker diarization (with WhisperX)
+- Speaker diarization (with WhisperX or GigaAM)
 - FFmpeg integration for broad audio/video format support
 - GPU acceleration support
 - Configurable model loading/unloading
@@ -63,7 +64,7 @@ docker run -d -p 9000:9000 \
 
 Key configuration options:
 
-- `ASR_ENGINE`: Engine selection (openai_whisper, faster_whisper, whisperx)
+- `ASR_ENGINE`: Engine selection (openai_whisper, faster_whisper, whisperx, gigaam)
 - `ASR_MODEL`: Model selection (tiny, base, small, medium, large-v3, etc.)
 - `ASR_MODEL_PATH`: Custom path to store/load models
 - `ASR_DEVICE`: Device selection (cuda, cpu)

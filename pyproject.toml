@@ -16,6 +16,7 @@ dependencies = [
     "llvmlite (>=0.48.0)",
     "numba (>=0.66.0)",
     "huggingface-hub (>=0.19,<1.0)",
+    "gigaam @ git+https://github.com/salute-developers/GigaAM.git@7447938d791c4f3e643386ee22c33777004293a5",
 ]
 authors = [
     { name = "Ahmet Öner" },

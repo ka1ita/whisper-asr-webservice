@@ -43,7 +43,7 @@ Docker Hub: <https://hub.docker.com/r/onerahmet/openai-whisper-asr-webservice>
 The following environment variables can be used to configure the service:
 
 - `ASR_MODEL`: Whisper model to use (tiny, base, small, medium, large) [default: base]
-- `ASR_ENGINE`: ASR engine to use (openai_whisper, faster_whisper) [default: openai_whisper]
+- `ASR_ENGINE`: ASR engine to use (openai_whisper, faster_whisper, whisperx, gigaam) [default: openai_whisper]
 - `ASR_MODEL_PATH`: Custom path to store/load model files [optional]
 
 > Interactive Swagger API documentation is available at <http://localhost:9000/docs>

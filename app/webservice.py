@@ -69,22 +69,22 @@ async def asr(
     word_timestamps: bool = Query(
         default=False,
         description="Word level timestamps",
-        include_in_schema=(True if CONFIG.ASR_ENGINE == "faster_whisper" else False),
+        include_in_schema=(True if CONFIG.ASR_ENGINE in ("faster_whisper", "gigaam") else False),
     ),
     diarize: bool = Query(
         default=False,
         description="Diarize the input",
-        include_in_schema=(True if CONFIG.ASR_ENGINE == "whisperx" and CONFIG.HF_TOKEN != "" else False),
+        include_in_schema=(True if CONFIG.ASR_ENGINE in ("whisperx", "gigaam") and CONFIG.HF_TOKEN != "" else False),
     ),
     min_speakers: Union[int, None] = Query(
         default=None,
         description="Min speakers in this file",
-        include_in_schema=(True if CONFIG.ASR_ENGINE == "whisperx" else False),
+        include_in_schema=(True if CONFIG.ASR_ENGINE in ("whisperx", "gigaam") else False),
     ),
     max_speakers: Union[int, None] = Query(
         default=None,
         description="Max speakers in this file",
-        include_in_schema=(True if CONFIG.ASR_ENGINE == "whisperx" else False),
+        include_in_schema=(True if CONFIG.ASR_ENGINE in ("whisperx", "gigaam") else False),
     ),
     output: Union[str, None] = Query(default="txt", enum=["txt", "vtt", "srt", "tsv", "json"]),
 ):

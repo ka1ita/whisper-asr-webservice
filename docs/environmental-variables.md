@@ -18,6 +18,12 @@
     export ASR_ENGINE=whisperx
     ```
 
+=== ":octicons-file-code-16: `gigaam`"
+
+    ```shell
+    export ASR_ENGINE=gigaam
+    ```
+
 ### Configuring the `Model`
 
 ```shell
@@ -34,6 +40,12 @@ For English-only applications, the `.en` models tend to perform better, especial
 models. We observed that the difference becomes less significant for the `small.en` and `medium.en` models.
 
 The distilled models offer improved inference speed while maintaining good accuracy.
+
+For the `gigaam` engine (Russian-focused, from [GigaAM](https://github.com/salute-developers/GigaAM)),
+`ASR_MODEL` is a GigaAM model name instead, e.g. `rnnt` (default), `ctc`, `v1_rnnt`, `v1_ctc`,
+`v3_e2e_rnnt`, `v3_e2e_ctc`, or a `multilingual_*` variant — see the GigaAM repo for the full list.
+Audio longer than 25 seconds is automatically handled via GigaAM's own long-form transcription, which
+requires `HF_TOKEN` (see below) to download a pyannote voice-activity-detection model.
 
 ### Configuring the `Model Path`
 
@@ -95,7 +107,8 @@ These options only apply when using the WhisperX engine:
 export HF_TOKEN=your_token_here
 ```
 
-Required when using the WhisperX engine to download the diarization model.
+Required when using the WhisperX engine to download the diarization model, and when using the GigaAM
+engine (for its long-form audio VAD model and/or diarization).
 
 When using `docker compose`, copy `.env.example` to `.env` and set `HF_TOKEN` there instead —
 `docker-compose.yml` and `docker-compose.gpu.yml` both load it via `env_file`.

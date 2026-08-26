@@ -8,19 +8,27 @@ class CONFIG:
     Configuration class for ASR models.
     Reads environment variables for runtime configuration, with sensible defaults.
     """
-    # Determine the ASR engine ('faster_whisper', 'openai_whisper' or 'whisperx')
+    # Determine the ASR engine ('faster_whisper', 'openai_whisper', 'whisperx' or 'gigaam')
     ASR_ENGINE = os.getenv("ASR_ENGINE", "openai_whisper")
 
     # Retrieve Huggingface Token
     HF_TOKEN = os.getenv("HF_TOKEN", "")
     if ASR_ENGINE == "whisperx" and HF_TOKEN == "":
         print("You must set the HF_TOKEN environment variable to download the diarization model used by WhisperX.")
+    if ASR_ENGINE == "gigaam" and HF_TOKEN == "":
+        print(
+            "You must set the HF_TOKEN environment variable to enable GigaAM's long-form audio support "
+            "(downloads a pyannote VAD segmentation model) and/or diarization."
+        )
 
     # Determine the computation device (GPU or CPU)
     DEVICE = os.getenv("ASR_DEVICE", "cuda" if torch.cuda.is_available() else "cpu")
 
-    # Model name to use (e.g., "base", "small", etc.)
-    MODEL_NAME = os.getenv("ASR_MODEL", "base")
+    # Model name to use. For 'openai_whisper'/'faster_whisper'/'whisperx': a Whisper size
+    # (e.g. "base", "small"). For 'gigaam': a GigaAM model name (e.g. "rnnt", "ctc", "v1_rnnt",
+    # "v1_ctc", "v3_e2e_rnnt", or a "multilingual_*" variant) - see
+    # https://github.com/salute-developers/GigaAM for the full list.
+    MODEL_NAME = os.getenv("ASR_MODEL", "rnnt" if ASR_ENGINE == "gigaam" else "base")
 
     # Path to the model directory
     MODEL_PATH = os.getenv("ASR_MODEL_PATH", os.path.join(os.path.expanduser("~"), ".cache", "whisper"))
@@ -30,6 +38,7 @@ class CONFIG:
     #   'float16' - 16-bit floating-point precision (lower precision, faster inference)
     #   'int8' - 8-bit integer precision (lowest precision, fastest inference)
     # Defaults to 'float32' for GPU availability, 'int8' for CPU.
+    # Ignored by the 'gigaam' engine, which has no quantization/compute_type concept.
     MODEL_QUANTIZATION = os.getenv("ASR_QUANTIZATION", "float32" if torch.cuda.is_available() else "int8")
     if MODEL_QUANTIZATION not in {"float32", "float16", "int8"}:
         raise ValueError("Invalid MODEL_QUANTIZATION. Choose 'float32', 'float16', or 'int8'.")
@@ -45,3 +54,14 @@ class CONFIG:
     SUBTITLE_MAX_LINE_WIDTH = int(os.getenv("SUBTITLE_MAX_LINE_WIDTH", 1000))
     SUBTITLE_MAX_LINE_COUNT = int(os.getenv("SUBTITLE_MAX_LINE_COUNT", 2))
     SUBTITLE_HIGHLIGHT_WORDS = os.getenv("SUBTITLE_HIGHLIGHT_WORDS", "false").lower() == "true"
+
+    print(
+        "Starting with config: "
+        f"ASR_ENGINE={ASR_ENGINE}, "
+        f"ASR_MODEL={MODEL_NAME}, "
+        f"ASR_DEVICE={DEVICE}, "
+        f"ASR_QUANTIZATION={MODEL_QUANTIZATION}, "
+        f"ASR_MODEL_PATH={MODEL_PATH}, "
+        f"MODEL_IDLE_TIMEOUT={MODEL_IDLE_TIMEOUT}, "
+        f"HF_TOKEN={'set' if HF_TOKEN else 'unset'}"
+    )

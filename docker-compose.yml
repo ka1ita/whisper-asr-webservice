@@ -9,7 +9,8 @@ services:
       - path: ./.env
         required: false
     environment:
-      - ASR_MODEL=base
+      - ASR_ENGINE=whisperx
+      - ASR_MODEL=tiny
     ports:
       - "9000:9000"
     volumes:
