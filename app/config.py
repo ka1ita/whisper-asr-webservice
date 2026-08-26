@@ -55,6 +55,11 @@ class CONFIG:
     SUBTITLE_MAX_LINE_COUNT = int(os.getenv("SUBTITLE_MAX_LINE_COUNT", 2))
     SUBTITLE_HIGHLIGHT_WORDS = os.getenv("SUBTITLE_HIGHLIGHT_WORDS", "false").lower() == "true"
 
+    # Log each /asr and /detect-language request's start and completion (with elapsed time)
+    # to stdout. Useful for confirming a request was received, since otherwise nothing is logged
+    # until the whole transcription pipeline finishes.
+    REQUEST_LOGGING = os.getenv("ASR_REQUEST_LOGGING", "false").lower() == "true"
+
     print(
         "Starting with config: "
         f"ASR_ENGINE={ASR_ENGINE}, "
@@ -63,5 +68,6 @@ class CONFIG:
         f"ASR_QUANTIZATION={MODEL_QUANTIZATION}, "
         f"ASR_MODEL_PATH={MODEL_PATH}, "
         f"MODEL_IDLE_TIMEOUT={MODEL_IDLE_TIMEOUT}, "
-        f"HF_TOKEN={'set' if HF_TOKEN else 'unset'}"
+        f"HF_TOKEN={'set' if HF_TOKEN else 'unset'}, "
+        f"ASR_REQUEST_LOGGING={REQUEST_LOGGING}"
     )

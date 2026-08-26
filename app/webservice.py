@@ -1,5 +1,6 @@
 import importlib.metadata
 import os
+import time
 from os import path
 from typing import Annotated, Optional, Union
 from urllib.parse import quote
@@ -88,6 +89,12 @@ async def asr(
     ),
     output: Union[str, None] = Query(default="txt", enum=["txt", "vtt", "srt", "tsv", "json"]),
 ):
+    if CONFIG.REQUEST_LOGGING:
+        print(
+            f"[{CONFIG.ASR_ENGINE}] /asr start: file={audio_file.filename!r}, task={task}, language={language}, "
+            f"diarize={diarize}, output={output}"
+        )
+    start_time = time.time()
     result = asr_model.transcribe(
         load_audio(audio_file.file, encode),
         task,
@@ -98,6 +105,8 @@ async def asr(
         {"diarize": diarize, "min_speakers": min_speakers, "max_speakers": max_speakers},
         output,
     )
+    if CONFIG.REQUEST_LOGGING:
+        print(f"[{CONFIG.ASR_ENGINE}] /asr done: file={audio_file.filename!r} in {time.time() - start_time:.1f}s")
     return StreamingResponse(
         result,
         media_type="text/plain",
@@ -113,7 +122,15 @@ async def detect_language(
     audio_file: UploadFile = File(...),  # noqa: B008
     encode: bool = Query(default=True, description="Encode audio first through FFmpeg"),
 ):
+    if CONFIG.REQUEST_LOGGING:
+        print(f"[{CONFIG.ASR_ENGINE}] /detect-language start: file={audio_file.filename!r}")
+    start_time = time.time()
     detected_lang_code, confidence = asr_model.language_detection(load_audio(audio_file.file, encode))
+    if CONFIG.REQUEST_LOGGING:
+        print(
+            f"[{CONFIG.ASR_ENGINE}] /detect-language done: file={audio_file.filename!r} "
+            f"in {time.time() - start_time:.1f}s"
+        )
     return {
         "detected_language": tokenizer.LANGUAGES[detected_lang_code],
         "language_code": detected_lang_code,

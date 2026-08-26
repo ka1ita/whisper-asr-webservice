@@ -121,3 +121,12 @@ engine (for its long-form audio VAD model and/or diarization).
 
 When using `docker compose`, copy `.env.example` to `.env` and set `HF_TOKEN` there instead —
 `docker-compose.yml` and `docker-compose.gpu.yml` both load it via `env_file`.
+
+### Configuring Request Logging
+
+```shell
+export ASR_REQUEST_LOGGING=true
+```
+
+Defaults to `false`. Logs a line to stdout when an `/asr` or `/detect-language` request starts
+(filename and params) and when it finishes (with elapsed time). Set to `true` to enable.
