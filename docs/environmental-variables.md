@@ -42,8 +42,17 @@ models. We observed that the difference becomes less significant for the `small.
 The distilled models offer improved inference speed while maintaining good accuracy.
 
 For the `gigaam` engine (Russian-focused, from [GigaAM](https://github.com/salute-developers/GigaAM)),
-`ASR_MODEL` is a GigaAM model name instead, e.g. `rnnt` (default), `ctc`, `v1_rnnt`, `v1_ctc`,
-`v3_e2e_rnnt`, `v3_e2e_ctc`, or a `multilingual_*` variant — see the GigaAM repo for the full list.
+`ASR_MODEL` is a GigaAM model name instead. Available ASR_MODELs are:
+
+- Short names (aliased to the `v3_*` models below): `rnnt` (default), `ctc`, `e2e_rnnt`, `e2e_ctc`
+- Russian-only models: `v1_rnnt`, `v1_ctc`, `v2_rnnt`, `v2_ctc`, `v3_rnnt`, `v3_ctc`, `v3_e2e_rnnt`, `v3_e2e_ctc`
+- Multilingual models (CTC only): `multilingual_ctc`, `multilingual_large_ctc`
+- A local filesystem path to a fine-tuned `.ckpt` checkpoint
+
+GigaAM also ships `*_ssl` (self-supervised pretraining: `v1_ssl`, `v2_ssl`, `v3_ssl`, `multilingual_ssl`,
+`multilingual_large_ssl`) and `emo` (emotion recognition) model names, but those aren't speech-to-text
+models and aren't usable with this engine's transcription pipeline.
+
 Audio longer than 25 seconds is automatically handled via GigaAM's own long-form transcription, which
 requires `HF_TOKEN` (see below) to download a pyannote voice-activity-detection model.
 
