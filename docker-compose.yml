@@ -10,7 +10,9 @@ services:
         required: false
     environment:
       - ASR_ENGINE=gigaam
-      - ASR_MODEL=v3_e2e_rnnt
+      - ASR_MODEL=v1_rnnt
+      - ASR_REQUEST_LOGGING=true
+      #- ASR_MODEL=v3_e2e_rnnt
       #- ASR_ENGINE=whisperx
       #- ASR_MODEL=tiny
     ports:

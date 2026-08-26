@@ -8,7 +8,13 @@ from threading import Thread
 from typing import BinaryIO, List, Optional, Union
 
 import gigaam
+import gigaam.vad_utils as gigaam_vad_utils
 import numpy as np
+import torch
+from pyannote.audio import Model
+from pyannote.audio.core.model import HF_PYTORCH_WEIGHTS_NAME
+from pyannote.audio.core.task import Problem, Resolution, Specifications
+from torch.torch_version import TorchVersion
 from whisperx.diarize import assign_word_speakers
 
 from app.asr_models.asr_model import ASRModel
@@ -19,6 +25,23 @@ from app.utils import ResultWriter, WriteJSON, WriteSRT, WriteTSV, WriteTXT, Wri
 # GigaAM's own `transcribe()` raises for audio longer than this and requires
 # `transcribe_longform()` instead - mirrors gigaam.model.LONGFORM_THRESHOLD (in seconds).
 _LONGFORM_THRESHOLD_SECONDS = 25.0
+
+
+def _load_segmentation_model_from_local_snapshot(model_id: str) -> Model:
+    """
+    Works around a bug in gigaam.vad_utils.load_segmentation_model: it passes the resolved
+    snapshot *directory* to pyannote's Model.from_pretrained(), which only accepts a checkpoint
+    file, a URL, or a HF repo id - a bare directory falls through to the repo-id branch and
+    huggingface_hub raises HFValidationError. Point it at the actual weights file instead.
+    """
+    local_path = gigaam_vad_utils.resolve_local_segmentation_path(model_id=model_id)
+    weights_path = os.path.join(local_path, HF_PYTORCH_WEIGHTS_NAME)
+
+    with torch.serialization.safe_globals([TorchVersion, Problem, Specifications, Resolution]):
+        return Model.from_pretrained(weights_path)
+
+
+gigaam_vad_utils.load_segmentation_model = _load_segmentation_model_from_local_snapshot
 
 
 @dataclass
