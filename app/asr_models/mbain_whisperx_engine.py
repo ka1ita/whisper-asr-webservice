@@ -1,8 +1,10 @@
 import time
+from contextlib import contextmanager
 from io import StringIO
 from threading import Thread
 from typing import BinaryIO, Union
 
+import torch
 import whisperx
 from whisperx.audio import N_SAMPLES
 from whisperx.diarize import DiarizationPipeline
@@ -10,6 +12,22 @@ from whisperx.utils import ResultWriter, SubtitlesWriter, WriteJSON, WriteSRT, W
 
 from app.asr_models.asr_model import ASRModel
 from app.config import CONFIG
+
+
+@contextmanager
+def _allow_full_unpickling_for_pyannote_checkpoints():
+    """pyannote checkpoints (bundled VAD model, downloaded diarization models) contain omegaconf/lightning objects that torch>=2.6's default weights_only=True unpickler rejects."""
+    original_load = torch.load
+
+    def load_with_weights_only_false(*args, **kwargs):
+        kwargs["weights_only"] = False
+        return original_load(*args, **kwargs)
+
+    torch.load = load_with_weights_only_false
+    try:
+        yield
+    finally:
+        torch.load = original_load
 
 
 class WhisperXASR(ASRModel):
@@ -23,18 +41,19 @@ class WhisperXASR(ASRModel):
 
     def load_model(self):
         asr_options = {"without_timestamps": False}
-        self.model['whisperx'] = whisperx.load_model(
-            CONFIG.MODEL_NAME,
-            device=CONFIG.DEVICE,
-            compute_type=CONFIG.MODEL_QUANTIZATION,
-            asr_options=asr_options
-        )
-
-        if CONFIG.HF_TOKEN != "":
-            self.model['diarize_model'] = DiarizationPipeline(
-                use_auth_token=CONFIG.HF_TOKEN,
-                device=CONFIG.DEVICE
+        with _allow_full_unpickling_for_pyannote_checkpoints():
+            self.model['whisperx'] = whisperx.load_model(
+                CONFIG.MODEL_NAME,
+                device=CONFIG.DEVICE,
+                compute_type=CONFIG.MODEL_QUANTIZATION,
+                asr_options=asr_options
             )
+
+            if CONFIG.HF_TOKEN != "":
+                self.model['diarize_model'] = DiarizationPipeline(
+                    use_auth_token=CONFIG.HF_TOKEN,
+                    device=CONFIG.DEVICE
+                )
 
         Thread(target=self.monitor_idleness, daemon=True).start()
 
