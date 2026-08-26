@@ -46,5 +46,8 @@ public
 # Sample client output
 /client/output/
 
+# Local cache of the client/ content hash used by scripts/rebuild-client.sh|ps1
+/client/.docker-build-hash
+
 # Local secrets (copy .env.example -> .env)
 /.env

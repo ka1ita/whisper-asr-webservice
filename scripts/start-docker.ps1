@@ -1,7 +1,8 @@
 <#
 .SYNOPSIS
     Starts whisper-asr-webservice via docker compose, waits for it to become ready,
-    then runs the sample client (docker-compose.yml "client" service) against it.
+    rebuilds the client image only if client/ has changed (see rebuild-client.ps1), then
+    runs the sample client (docker-compose.yml "client" service) against it.
 
 .PARAMETER Gpu
     Use docker-compose.gpu.yml / the GPU service instead of the CPU one.
@@ -56,5 +57,7 @@ if ($ready) {
     Write-Warning "$service did not respond after 5 minutes; attempting to run the client anyway."
 }
 
+& "$PSScriptRoot/rebuild-client.ps1" -Gpu:$Gpu
+
 Write-Host "Running client against $service ..."
-docker compose -f $composeFile run --rm --build client
+docker compose -f $composeFile run --rm client

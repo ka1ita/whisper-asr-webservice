@@ -55,8 +55,20 @@ container reads `./audio` read-only and writes results to `./client/output` on t
 `ASR_CLIENT_OUTPUT_DIR` env vars set in the compose file, so no separate container config is
 needed.
 
-To run the client alone against an already-running service:
+`start-docker` rebuilds the client image first, but only if something under `client/` has
+actually changed since the last build (via `scripts/rebuild-client.sh` / `.ps1`, which hashes
+`client/` and compares against `client/.docker-build-hash`) — so repeated runs are fast
+instead of re-building the image every time. Run that script on its own if you just want to
+pick up client changes without starting/running anything:
 
 ```shell
-docker compose run --rm --build client
+./scripts/rebuild-client.sh        # CPU compose project
+./scripts/rebuild-client.sh gpu    # GPU compose project
+# Windows: .\scripts\rebuild-client.ps1  [-Gpu]
+```
+
+To run the client alone against an already-running service, without any rebuild check:
+
+```shell
+docker compose run --rm client
 ```
