@@ -32,8 +32,14 @@ docker run -d -p 9000:9000 -e ASR_MODEL=base -e ASR_ENGINE=openai_whisper onerah
 ## Configure
 
 Edit [`config.yaml`](config.yaml) to set the server URL, the input audio directory, and the
-`/asr` request options (task, language, VAD, word timestamps, etc.). Comments in
+`/asr` request options (task, language, VAD, word timestamps, diarization, etc.). Comments in
 that file explain each field.
+
+Speaker diarization (`diarize: true`, plus optional `min_speakers`/`max_speakers`) only works
+when the server is running with `ASR_ENGINE=whisperx` and a valid `HF_TOKEN` — see the repo
+root [README.md](../README.md) and [`.env.example`](../.env.example). It also only shows up in
+the output if `output_format` is `json`, `srt`, or `vtt`; plain `txt` output has no speaker
+labels.
 
 ## Run
 

@@ -44,8 +44,16 @@ vad_filter: false
 # Word-level timestamps (faster_whisper engine only).
 word_timestamps: false
 
+# Speaker diarization (whisperx engine only; also requires HF_TOKEN set on the server).
+diarize: false
+
+# Optional min/max number of speakers to hint the diarization pipeline with (whisperx only).
+min_speakers: null
+max_speakers: null
+
 # Output format requested from the server: txt, vtt, srt, tsv, json.
-# Kept as "txt" since results are saved as .txt files.
+# Kept as "txt" since results are saved as .txt files. Note that plain txt output does not
+# include speaker labels even with diarize enabled -- use "json", "srt", or "vtt" to see them.
 output_format: "txt"
 
 # HTTP request timeout in seconds (transcription can take a while on CPU).

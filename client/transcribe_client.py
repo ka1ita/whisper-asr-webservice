@@ -50,11 +50,16 @@ def transcribe_file(audio_path: Path, config: dict) -> str:
         "output": config["output_format"],
         "vad_filter": str(config["vad_filter"]).lower(),
         "word_timestamps": str(config["word_timestamps"]).lower(),
+        "diarize": str(config.get("diarize", False)).lower(),
     }
     if config.get("language"):
         params["language"] = config["language"]
     if config.get("initial_prompt"):
         params["initial_prompt"] = config["initial_prompt"]
+    if config.get("min_speakers") is not None:
+        params["min_speakers"] = config["min_speakers"]
+    if config.get("max_speakers") is not None:
+        params["max_speakers"] = config["max_speakers"]
 
     url = f"{config['server_url'].rstrip('/')}/asr"
     with audio_path.open("rb") as f:
