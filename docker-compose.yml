@@ -5,6 +5,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    env_file:
+      - path: ./.env
+        required: false
     environment:
       - ASR_MODEL=base
     ports:
@@ -12,6 +15,21 @@ services:
     volumes:
       - ./app:/app/app
       - cache-whisper:/root/.cache
+
+  client:
+    build:
+      context: ./client
+    profiles:
+      - client
+    depends_on:
+      - whisper-asr-webservice
+    environment:
+      - ASR_CLIENT_SERVER_URL=http://whisper-asr-webservice:9000
+      - ASR_CLIENT_AUDIO_DIR=/audio
+      - ASR_CLIENT_OUTPUT_DIR=/output
+    volumes:
+      - ./audio:/audio:ro
+      - ./client/output:/output
 
 volumes:
   cache-whisper:

@@ -96,3 +96,6 @@ export HF_TOKEN=your_token_here
 ```
 
 Required when using the WhisperX engine to download the diarization model.
+
+When using `docker compose`, copy `.env.example` to `.env` and set `HF_TOKEN` there instead —
+`docker-compose.yml` and `docker-compose.gpu.yml` both load it via `env_file`.

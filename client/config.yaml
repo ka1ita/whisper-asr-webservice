@@ -1,0 +1,53 @@
+# Sample client configuration.
+# See docs/endpoints.md and app/webservice.py for the full set of /asr query parameters.
+#
+# server_url / audio_dir / output_dir can each be overridden without editing this file via
+# the ASR_CLIENT_SERVER_URL / ASR_CLIENT_AUDIO_DIR / ASR_CLIENT_OUTPUT_DIR env vars — this is
+# how the "client" service in docker-compose.yml points at container paths/hostnames.
+
+# Base URL of a running whisper-asr-webservice instance.
+server_url: "http://localhost:9000"
+
+# Directory to read input audio files from (relative to this file, or absolute).
+audio_dir: "../audio"
+
+# Directory to write transcription .txt files to (created if missing).
+output_dir: "./output"
+
+# File extensions (case-insensitive) considered audio input.
+audio_extensions:
+  - ".wav"
+  - ".mp3"
+  - ".m4a"
+  - ".flac"
+  - ".ogg"
+  - ".aac"
+  - ".wma"
+  - ".opus"
+
+# --- /asr request parameters ---
+
+# Encode audio through ffmpeg on the server before transcription.
+encode: true
+
+# "transcribe" or "translate".
+task: "transcribe"
+
+# ISO-639-1 language code (e.g. "en"), or null to auto-detect.
+language: null
+
+# Optional text to bias/prime the model with.
+initial_prompt: null
+
+# Voice activity detection filtering (faster_whisper engine only).
+vad_filter: false
+
+# Word-level timestamps (faster_whisper engine only).
+word_timestamps: false
+
+# Output format requested from the server: txt, vtt, srt, tsv, json.
+# Kept as "txt" since results are saved as .txt files.
+output_format: "txt"
+
+# HTTP request timeout in seconds (transcription can take a while on CPU).
+request_timeout_seconds: 600
