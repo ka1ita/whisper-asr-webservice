@@ -1,7 +1,8 @@
 # Sample Python client
 
 Transcribes every audio file in [`../audio/`](../audio/) by calling a running whisper-asr-webservice
-instance's `/asr` endpoint, and writes each result to `client/output/<filename>.txt`.
+instance's `/asr` endpoint, and writes each result to `<filename>.txt` next to its source audio
+file, replacing it if one already exists.
 
 ## Setup
 
@@ -11,14 +12,14 @@ python -m venv .venv && source .venv/bin/activate   # optional
 pip install -r requirements.txt
 ```
 
-Or skip the manual venv/install steps with `./scripts/start-client.sh` (`.ps1` on Windows,
-run from the repo root) — it creates/reuses `client/.venv`, (re)installs
-`client/requirements.txt` only when it has changed, and runs the client. It's the fastest way
-to iterate locally (no Docker build/startup):
+Or skip the manual venv/install steps with `./scripts/python-start.sh` (run from the repo
+root) — it creates/reuses `client/.venv`, (re)installs `client/requirements.txt` only when it
+has changed, and runs the client. It's the fastest way to iterate locally (no Docker
+build/startup):
 
 ```shell
-./scripts/start-client.sh
-./scripts/start-client.sh --config other.yaml   # extra args are forwarded
+./scripts/python-start.sh
+./scripts/python-start.sh --config other.yaml   # extra args are forwarded
 ```
 
 Make sure a whisper-asr-webservice instance is running (see the repo root [README.md](../README.md)),
@@ -30,9 +31,9 @@ docker run -d -p 9000:9000 -e ASR_MODEL=base -e ASR_ENGINE=openai_whisper onerah
 
 ## Configure
 
-Edit [`config.yaml`](config.yaml) to set the server URL, input/output directories, and the
-`/asr` request options (task, language, VAD, word timestamps, etc.). Comments in that file
-explain each field.
+Edit [`config.yaml`](config.yaml) to set the server URL, the input audio directory, and the
+`/asr` request options (task, language, VAD, word timestamps, etc.). Comments in
+that file explain each field.
 
 ## Run
 
@@ -41,9 +42,10 @@ python transcribe_client.py
 # or: python transcribe_client.py --config path/to/other-config.yaml
 ```
 
-Each audio file in `audio_dir` produces one `<stem>.txt` file in `output_dir` containing the
-transcription. Files that fail to transcribe are reported but don't stop the rest of the batch;
-the script exits non-zero if any file failed.
+Each audio file in `audio_dir` produces one `<stem>.txt` file next to it, containing the
+transcription (an existing `.txt` with the same name is replaced). Files that fail to
+transcribe are reported but don't stop the rest of the batch; the script exits non-zero if any
+file failed.
 
 ## Running via Docker Compose
 
@@ -52,29 +54,35 @@ it, transcribe everything in `audio/`) can be run with one command from the repo
 
 ```shell
 # copy .env.example to .env first if you need HF_TOKEN or other overrides
-./scripts/start-docker.sh        # CPU
-./scripts/start-docker.sh gpu    # GPU
-# Windows: .\scripts\start-docker.ps1  [-Gpu]
+./scripts/docker-rebuild.sh      # build/refresh images (first run, or after changes)
+./scripts/docker-start.sh        # CPU
+./scripts/docker-start.sh gpu    # GPU
 ```
 
-This builds and starts the `whisper-asr-webservice` (or `-gpu`) service, then runs the
-`client` service (defined in `docker-compose.yml` / `docker-compose.gpu.yml`, `profiles:
-[client]` so it never starts with a plain `docker compose up`) against it. The client
-container reads `./audio` read-only and writes results to `./client/output` on the host —
-`config.yaml` is overridden via the `ASR_CLIENT_SERVER_URL` / `ASR_CLIENT_AUDIO_DIR` /
-`ASR_CLIENT_OUTPUT_DIR` env vars set in the compose file, so no separate container config is
-needed.
+`docker-start` starts the `whisper-asr-webservice` (or `-gpu`) service using whatever images
+already exist, waits for it to become ready, then runs the `client` service (defined in
+`docker-compose.yml` / `docker-compose.gpu.yml`, `profiles: [client]` so it never starts with
+a plain `docker compose up`) against it. The client container reads and writes `./audio` on
+the host, dropping each `<filename>.txt` next to its source file — `config.yaml` is overridden
+via the `ASR_CLIENT_SERVER_URL` / `ASR_CLIENT_AUDIO_DIR` env vars set in the compose file, so no
+separate container config is needed.
 
-`start-docker` rebuilds the client image first, but only if something under `client/` has
-actually changed since the last build (via `scripts/rebuild-client.sh` / `.ps1`, which hashes
-`client/` and compares against `client/.docker-build-hash`) — so repeated runs are fast
-instead of re-building the image every time. Run that script on its own if you just want to
-pick up client changes without starting/running anything:
+`docker-rebuild` rebuilds the ASR service image every time, and the client image only if
+something under `client/` has actually changed since the last build (hashed and compared
+against `client/.docker-build-hash`) — so repeated runs are fast instead of re-building the
+client image every time:
 
 ```shell
-./scripts/rebuild-client.sh        # CPU compose project
-./scripts/rebuild-client.sh gpu    # GPU compose project
-# Windows: .\scripts\rebuild-client.ps1  [-Gpu]
+./scripts/docker-rebuild.sh        # CPU compose project
+./scripts/docker-rebuild.sh gpu    # GPU compose project
+```
+
+To stop the service (and remove its containers/network — images and the cache volume are
+left in place):
+
+```shell
+./scripts/docker-stop.sh        # CPU
+./scripts/docker-stop.sh gpu    # GPU
 ```
 
 To run the client alone against an already-running service, without any rebuild check:

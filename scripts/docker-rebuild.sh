@@ -27,7 +27,6 @@ hash_file="client/.docker-build-hash"
 
 current_hash="$(
   find client -type f \
-    ! -path "client/output/*" \
     ! -name ".docker-build-hash" \
     -print0 \
   | sort -z \

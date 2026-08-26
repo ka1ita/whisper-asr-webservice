@@ -1,18 +1,17 @@
 # Sample client configuration.
 # See docs/endpoints.md and app/webservice.py for the full set of /asr query parameters.
 #
-# server_url / audio_dir / output_dir can each be overridden without editing this file via
-# the ASR_CLIENT_SERVER_URL / ASR_CLIENT_AUDIO_DIR / ASR_CLIENT_OUTPUT_DIR env vars — this is
-# how the "client" service in docker-compose.yml points at container paths/hostnames.
+# server_url / audio_dir can each be overridden without editing this file via the
+# ASR_CLIENT_SERVER_URL / ASR_CLIENT_AUDIO_DIR env vars — this is how the "client" service in
+# docker-compose.yml points at container paths/hostnames.
 
 # Base URL of a running whisper-asr-webservice instance.
 server_url: "http://localhost:9000"
 
 # Directory to read input audio files from (relative to this file, or absolute).
+# Transcription .txt files are written here too, next to each source audio file
+# (same stem, .txt extension), replacing any file already there.
 audio_dir: "../audio"
-
-# Directory to write transcription .txt files to (created if missing).
-output_dir: "./output"
 
 # File extensions (case-insensitive) considered audio input.
 audio_extensions:

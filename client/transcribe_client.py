@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Sample client: transcribes every audio file in a directory via the
-whisper-asr-webservice /asr endpoint and saves each result as a .txt file.
+whisper-asr-webservice /asr endpoint and saves each result as a .txt file next
+to its source audio file (replacing it if one already exists).
 
 Usage:
     python transcribe_client.py [--config config.yaml]
@@ -20,7 +21,6 @@ import yaml
 ENV_OVERRIDES = {
     "ASR_CLIENT_SERVER_URL": "server_url",
     "ASR_CLIENT_AUDIO_DIR": "audio_dir",
-    "ASR_CLIENT_OUTPUT_DIR": "output_dir",
 }
 
 
@@ -35,7 +35,6 @@ def load_config(config_path: Path) -> dict:
 
     base_dir = config_path.parent
     config["audio_dir"] = (base_dir / config["audio_dir"]).resolve()
-    config["output_dir"] = (base_dir / config["output_dir"]).resolve()
     return config
 
 
@@ -82,7 +81,6 @@ def main() -> int:
 
     config = load_config(args.config)
     audio_dir: Path = config["audio_dir"]
-    output_dir: Path = config["output_dir"]
 
     if not audio_dir.is_dir():
         print(f"Audio directory not found: {audio_dir}", file=sys.stderr)
@@ -92,8 +90,6 @@ def main() -> int:
     if not audio_files:
         print(f"No audio files found in {audio_dir}")
         return 0
-
-    output_dir.mkdir(parents=True, exist_ok=True)
 
     failures = 0
     for audio_path in audio_files:
@@ -105,7 +101,7 @@ def main() -> int:
             failures += 1
             continue
 
-        output_path = output_dir / f"{audio_path.stem}.txt"
+        output_path = audio_path.with_suffix(".txt")
         output_path.write_text(result_text, encoding="utf-8")
         print(f"-> {output_path}")
 
