@@ -1,6 +1,6 @@
 # Sample Python client
 
-Transcribes every audio file in [`../audio/`](../audio/) by calling a running whisper-asr-webservice
+Transcribes every audio file in [`../audio/`](../audio/) by calling a running asr-webservice
 instance's `/asr` endpoint, and writes each result to `<filename>.txt` next to its source audio
 file, replacing it if one already exists.
 
@@ -22,7 +22,7 @@ build/startup):
 ./scripts/python-start.sh --config other.yaml   # extra args are forwarded
 ```
 
-Make sure a whisper-asr-webservice instance is running (see the repo root [README.md](../README.md)),
+Make sure an asr-webservice instance is running (see the repo root [README.md](../README.md)),
 e.g.:
 
 ```shell
@@ -65,7 +65,7 @@ it, transcribe everything in `audio/`) can be run with one command from the repo
 ./scripts/docker-start.sh gpu    # GPU
 ```
 
-`docker-start` starts the `whisper-asr-webservice` (or `-gpu`) service using whatever images
+`docker-start` starts the `asr-webservice` (or `-gpu`) service using whatever images
 already exist, waits for it to become ready, then runs the `client` service (defined in
 `docker-compose.yml` / `docker-compose.gpu.yml`, `profiles: [client]` so it never starts with
 a plain `docker compose up`) against it. The client container reads and writes `./audio` on

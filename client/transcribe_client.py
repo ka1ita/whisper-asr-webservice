@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Sample client: transcribes every audio file in a directory via the
-whisper-asr-webservice /asr endpoint and saves each result as a .txt file next
+asr-webservice /asr endpoint and saves each result as a .txt file next
 to its source audio file (replacing it if one already exists).
 
 Usage:

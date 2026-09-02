@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Starts whisper-asr-webservice via docker compose (using whatever images already exist —
+# Starts asr-webservice via docker compose (using whatever images already exist —
 # run ./scripts/docker-rebuild.sh first to build/refresh them), waits for it to become ready,
 # then runs the sample client (docker-compose.yml "client" service) against it.
 #
@@ -16,10 +16,10 @@ cd "$repo_root"
 arg="${1:-}"
 
 compose_file="docker-compose.yml"
-service="whisper-asr-webservice"
+service="asr-webservice"
 if [[ "$arg" == "gpu" ]]; then
   compose_file="docker-compose.gpu.yml"
-  service="whisper-asr-webservice-gpu"
+  service="asr-webservice-gpu"
 fi
 
 if [[ ! -f .env && -f .env.example ]]; then

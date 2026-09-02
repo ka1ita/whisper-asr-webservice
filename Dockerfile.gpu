@@ -40,4 +40,4 @@ RUN poetry install --extras cuda
 
 EXPOSE 9000
 
-ENTRYPOINT ["whisper-asr-webservice"]
+ENTRYPOINT ["asr-webservice"]

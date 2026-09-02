@@ -5,7 +5,7 @@
 # ASR_CLIENT_SERVER_URL / ASR_CLIENT_AUDIO_DIR env vars — this is how the "client" service in
 # docker-compose.yml points at container paths/hostnames.
 
-# Base URL of a running whisper-asr-webservice instance.
+# Base URL of a running asr-webservice instance.
 server_url: "http://localhost:9000"
 
 # Directory to read input audio files from (relative to this file, or absolute).

@@ -32,7 +32,7 @@ poetry install --extras cuda
 Starting the Webservice:
 
 ```shell
-poetry run whisper-asr-webservice --host 0.0.0.0 --port 9000
+poetry run asr-webservice --host 0.0.0.0 --port 9000
 ```
 
 ### Build
@@ -45,24 +45,24 @@ poetry run whisper-asr-webservice --host 0.0.0.0 --port 9000
     
         ```shell
         # Build Image
-        docker build -t whisper-asr-webservice .
+        docker build -t asr-webservice .
         
         # Run Container
-        docker run -d -p 9000:9000 whisper-asr-webservice
+        docker run -d -p 9000:9000 asr-webservice
         # or with specific model
-        docker run -d -p 9000:9000 -e ASR_MODEL=base whisper-asr-webservice
+        docker run -d -p 9000:9000 -e ASR_MODEL=base asr-webservice
         ```
     
     === ":octicons-file-code-16: `GPU`"
     
         ```shell
         # Build Image
-        docker build -f Dockerfile.gpu -t whisper-asr-webservice-gpu .
+        docker build -f Dockerfile.gpu -t asr-webservice-gpu .
         
         # Run Container
-        docker run -d --gpus all -p 9000:9000 whisper-asr-webservice-gpu
+        docker run -d --gpus all -p 9000:9000 asr-webservice-gpu
         # or with specific model
-        docker run -d --gpus all -p 9000:9000 -e ASR_MODEL=base whisper-asr-webservice-gpu
+        docker run -d --gpus all -p 9000:9000 -e ASR_MODEL=base asr-webservice-gpu
         ```
 
     With `docker-compose`:

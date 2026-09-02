@@ -1,7 +1,7 @@
 version: "3.4"
 
 services:
-  whisper-asr-webservice:
+  asr-webservice:
     build:
       context: .
       dockerfile: Dockerfile
@@ -27,9 +27,9 @@ services:
     profiles:
       - client
     depends_on:
-      - whisper-asr-webservice
+      - asr-webservice
     environment:
-      - ASR_CLIENT_SERVER_URL=http://whisper-asr-webservice:9000
+      - ASR_CLIENT_SERVER_URL=http://asr-webservice:9000
       - ASR_CLIENT_AUDIO_DIR=/audio
     volumes:
       - ./audio:/audio

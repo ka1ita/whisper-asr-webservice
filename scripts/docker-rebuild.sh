@@ -14,10 +14,10 @@ cd "$repo_root"
 arg="${1:-}"
 
 compose_file="docker-compose.yml"
-service="whisper-asr-webservice"
+service="asr-webservice"
 if [[ "$arg" == "gpu" ]]; then
   compose_file="docker-compose.gpu.yml"
-  service="whisper-asr-webservice-gpu"
+  service="asr-webservice-gpu"
 fi
 
 echo "Building ${service} ..."

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Force-recreates the whisper-asr-webservice container without rebuilding the image — use this
+# Force-recreates the asr-webservice container without rebuilding the image — use this
 # after editing .env (e.g. ASR_MODEL) to make docker compose re-read env_file into a fresh
 # container, since `docker compose up` alone won't restart an already-running container just
 # because .env changed.
@@ -15,10 +15,10 @@ cd "$repo_root"
 arg="${1:-}"
 
 compose_file="docker-compose.yml"
-service="whisper-asr-webservice"
+service="asr-webservice"
 if [[ "$arg" == "gpu" ]]; then
   compose_file="docker-compose.gpu.yml"
-  service="whisper-asr-webservice-gpu"
+  service="asr-webservice-gpu"
 fi
 
 echo "Force-recreating ${service} ..."

@@ -26,4 +26,4 @@ RUN poetry install --extras cpu
 
 EXPOSE 9000
 
-ENTRYPOINT ["whisper-asr-webservice"]
+ENTRYPOINT ["asr-webservice"]

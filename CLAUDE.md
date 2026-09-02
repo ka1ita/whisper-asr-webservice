@@ -14,7 +14,7 @@ pip3 install poetry
 poetry install --extras cpu    # or: poetry install --extras cuda
 
 # Run the service locally
-poetry run whisper-asr-webservice --host 0.0.0.0 --port 9000
+poetry run asr-webservice --host 0.0.0.0 --port 9000
 # Swagger UI at http://localhost:9000/docs
 
 # Lint / format (configured in pyproject.toml, not wired into CI)

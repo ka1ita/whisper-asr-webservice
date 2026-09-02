@@ -1,7 +1,7 @@
 version: "3.4"
 
 services:
-  whisper-asr-webservice-gpu:
+  asr-webservice-gpu:
     build:
       context: .
       dockerfile: Dockerfile.gpu
@@ -30,9 +30,9 @@ services:
     profiles:
       - client
     depends_on:
-      - whisper-asr-webservice-gpu
+      - asr-webservice-gpu
     environment:
-      - ASR_CLIENT_SERVER_URL=http://whisper-asr-webservice-gpu:9000
+      - ASR_CLIENT_SERVER_URL=http://asr-webservice-gpu:9000
       - ASR_CLIENT_AUDIO_DIR=/audio
     volumes:
       - ./audio:/audio

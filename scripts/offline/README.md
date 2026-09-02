@@ -26,7 +26,7 @@ export HF_TOKEN=hf_xxx   # needed for whisperx diarization + gigaam long-form VA
 
 This builds the normal image, runs [warmup_models.py](warmup_models.py) inside a throwaway
 container to populate `/root/.cache`, commits that container to
-`whisper-asr-webservice:offline-preloaded` (or `-gpu`), and saves it to
+`asr-webservice:offline-preloaded` (or `-gpu`), and saves it to
 `whisper-asr-preloaded.tar` (or `-gpu.tar`) in the repo root. `HF_TOKEN` is only ever passed as
 a runtime env var to the warm-up container, never baked into an image layer.
 
@@ -52,7 +52,7 @@ To run without compose instead:
 ```bash
 docker run -d -p 9000:9000 \
   -e ASR_ENGINE=gigaam -e ASR_MODEL=v3_e2e_rnnt -e HF_TOKEN=hf_xxx \
-  whisper-asr-webservice:offline-preloaded
+  asr-webservice:offline-preloaded
 ```
 
 ## Updating the model set later

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Builds a whisper-asr-webservice image with every model listed in warmup_models.py already
+# Builds an asr-webservice image with every model listed in warmup_models.py already
 # downloaded into /root/.cache, then saves it to a tar file for transfer to a server with no
 # internet access. On that server: `docker load -i <tar>` then run docker-compose.offline.yml.
 #
@@ -18,11 +18,11 @@ cd "$repo_root"
 arg="${1:-}"
 
 dockerfile="Dockerfile"
-tag="whisper-asr-webservice:offline"
+tag="asr-webservice:offline"
 out_file="whisper-asr-preloaded.tar"
 if [[ "$arg" == "gpu" ]]; then
   dockerfile="Dockerfile.gpu"
-  tag="whisper-asr-webservice:offline-gpu"
+  tag="asr-webservice:offline-gpu"
   out_file="whisper-asr-preloaded-gpu.tar"
 fi
 
@@ -45,10 +45,12 @@ echo "Copying warm-up script into container ..."
 docker cp "$repo_root/scripts/offline/warmup_models.py" "$container:/app/warmup_models.py"
 
 echo "Downloading models (this can take a while and pull tens of GB) ..."
-docker exec "$container" /app/.venv/bin/python /app/warmup_models.py
+# Double leading slash survives Git Bash/MSYS path conversion (which would otherwise rewrite
+# these into Windows paths before they reach docker exec) - Linux collapses it back to one.
+docker exec "$container" //app/.venv/bin/python //app/warmup_models.py
 
 echo "Cache size:"
-docker exec "$container" du -sh /root/.cache
+docker exec "$container" du -sh //root/.cache
 
 echo "Committing warmed-up container to ${preloaded_tag} ..."
 docker commit "$container" "$preloaded_tag"

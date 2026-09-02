@@ -3,8 +3,8 @@
 # Creates/reuses a venv under client/.venv and (re)installs client/requirements.txt only
 # when it has changed, then runs client/transcribe_client.py.
 #
-# Expects an ASR service already running (e.g. `poetry run whisper-asr-webservice` or
-# `docker compose up whisper-asr-webservice`) at the server_url configured in client/config.yaml.
+# Expects an ASR service already running (e.g. `poetry run asr-webservice` or
+# `docker compose up asr-webservice`) at the server_url configured in client/config.yaml.
 #
 # Usage:
 #   ./scripts/python-start.sh                          # uses client/config.yaml

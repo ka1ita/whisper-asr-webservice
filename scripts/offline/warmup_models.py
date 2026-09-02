@@ -1,7 +1,7 @@
 """
 Downloads every model this offline deployment needs so they end up cached under
 /root/.cache inside the container's filesystem. Run once inside a throwaway container
-built from the whisper-asr-webservice image (see build-offline-image.sh), then
+built from the asr-webservice image (see build-offline-image.sh), then
 `docker commit` that container to bake the cache into a new image for offline transfer.
 
 Requires HF_TOKEN in the environment for the gated pyannote models (whisperx diarization,
