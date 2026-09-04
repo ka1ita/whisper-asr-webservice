@@ -2,6 +2,7 @@ version: "3.4"
 
 services:
   asr-webservice-gpu:
+    image: asr-webservice:latest
     build:
       context: .
       dockerfile: Dockerfile.gpu
@@ -16,8 +17,9 @@ services:
       - path: ./.env
         required: false
     environment:
-      - ASR_ENGINE=whisperx
-      - ASR_MODEL=tiny
+      - ASR_ENGINE=gigaam
+      - ASR_MODEL=v1_rnnt
+      - ASR_REQUEST_LOGGING=true
     ports:
       - "9000:9000"
     volumes:
