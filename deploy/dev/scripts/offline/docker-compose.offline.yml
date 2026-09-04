@@ -12,7 +12,7 @@ version: "3.4"
 # Edit ASR_ENGINE / ASR_MODEL below to match one of the models baked in by warmup_models.py.
 services:
   asr-webservice:
-    image: asr-webservice:offline-preloaded
+    image: asr-webservice:offline
     environment:
       - ASR_ENGINE=gigaam
       - ASR_MODEL=v3_e2e_rnnt

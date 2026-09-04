@@ -8,8 +8,8 @@
 # run this script to export the committed image into deploy/prod/dist/.
 #
 # Usage:
-#   ./deploy/dev/scripts/offline/export-offline-image.sh                 # CPU (asr-webservice:offline-preloaded)
-#   ./deploy/dev/scripts/offline/export-offline-image.sh gpu             # GPU (asr-webservice:offline-gpu-preloaded)
+#   ./deploy/dev/scripts/offline/export-offline-image.sh                 # CPU (asr-webservice:offline)
+#   ./deploy/dev/scripts/offline/export-offline-image.sh gpu             # GPU (asr-webservice:offline-gpu)
 #   ./deploy/dev/scripts/offline/export-offline-image.sh <image[:tag]>   # explicit image reference
 set -euo pipefail
 
@@ -18,13 +18,15 @@ cd "$repo_root"
 
 arg="${1:-}"
 
-image="asr-webservice:offline-preloaded"
+# Shared default image name - keep in sync with build-offline-image.sh and
+# docker-compose.offline.yml.
+image="asr-webservice:offline"
 out_file="whisper-asr-preloaded.tar"
 case "$arg" in
   ""|cpu)
     ;;
   gpu)
-    image="asr-webservice:offline-gpu-preloaded"
+    image="asr-webservice:offline-gpu"
     out_file="whisper-asr-preloaded-gpu.tar"
     ;;
   *)

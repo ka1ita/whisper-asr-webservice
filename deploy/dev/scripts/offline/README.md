@@ -24,9 +24,9 @@ export HF_TOKEN=hf_xxx   # needed for whisperx diarization + gigaam long-form VA
 ./deploy/dev/scripts/offline/build-offline-image.sh gpu      # GPU (Dockerfile.gpu)
 ```
 
-This builds the normal image, runs [warmup_models.py](warmup_models.py) inside a throwaway
-container to populate `/root/.cache`, and commits that container to
-`asr-webservice:offline-preloaded` (or `asr-webservice:offline-gpu-preloaded`). `HF_TOKEN` is
+This builds the normal image (as `asr-webservice:offline-base`), runs
+[warmup_models.py](warmup_models.py) inside a throwaway container to populate `/root/.cache`, and
+commits that container to `asr-webservice:offline` (or `asr-webservice:offline-gpu`). `HF_TOKEN` is
 only ever passed as a runtime env var to the warm-up container, never baked into an image layer.
 
 Then export the committed image to a tar under `deploy/prod/dist/` for transfer:
@@ -58,7 +58,7 @@ To run without compose instead:
 ```bash
 docker run -d -p 9000:9000 \
   -e ASR_ENGINE=gigaam -e ASR_MODEL=v3_e2e_rnnt -e HF_TOKEN=hf_xxx \
-  asr-webservice:offline-preloaded
+  asr-webservice:offline
 ```
 
 ## Updating the model set later

@@ -18,7 +18,7 @@ os.environ.setdefault("ASR_QUANTIZATION", "int8")
 from app.config import CONFIG  # noqa: E402
 
 # Used by openai_whisper, faster_whisper, and whisperx alike.
-WHISPER_SIZES = ["small", "medium", "large-v3", "large-v3-turbo"]
+WHISPER_SIZES = ["medium", "large-v3", "large-v3-turbo"]
 
 # GigaAM model names - see docs/environmental-variables.md for the full list of options.
 GIGAAM_MODELS = ["v3_rnnt", "v3_ctc", "v3_e2e_rnnt", "v3_e2e_ctc"]
