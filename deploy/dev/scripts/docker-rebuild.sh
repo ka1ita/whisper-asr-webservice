@@ -4,11 +4,11 @@
 # it's cheap to call on every startup).
 #
 # Usage:
-#   ./scripts/docker-rebuild.sh            # CPU (docker-compose.yml)
-#   ./scripts/docker-rebuild.sh gpu        # GPU (docker-compose.gpu.yml)
+#   ./deploy/dev/scripts/docker-rebuild.sh            # CPU (docker-compose.yml)
+#   ./deploy/dev/scripts/docker-rebuild.sh gpu        # GPU (docker-compose.gpu.yml)
 set -euo pipefail
 
-repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
 cd "$repo_root"
 
 arg="${1:-}"

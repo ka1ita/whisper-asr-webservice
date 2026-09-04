@@ -20,15 +20,21 @@ Expect the resulting image to be tens of GB - downloading and saving it takes a 
 
 ```bash
 export HF_TOKEN=hf_xxx   # needed for whisperx diarization + gigaam long-form VAD; omit to skip those
-./scripts/offline/build-offline-image.sh          # CPU (Dockerfile)
-./scripts/offline/build-offline-image.sh gpu      # GPU (Dockerfile.gpu)
+./deploy/dev/scripts/offline/build-offline-image.sh          # CPU (Dockerfile)
+./deploy/dev/scripts/offline/build-offline-image.sh gpu      # GPU (Dockerfile.gpu)
 ```
 
 This builds the normal image, runs [warmup_models.py](warmup_models.py) inside a throwaway
-container to populate `/root/.cache`, commits that container to
-`asr-webservice:offline-preloaded` (or `-gpu`), and saves it to
-`whisper-asr-preloaded.tar` (or `-gpu.tar`) in the repo root. `HF_TOKEN` is only ever passed as
-a runtime env var to the warm-up container, never baked into an image layer.
+container to populate `/root/.cache`, and commits that container to
+`asr-webservice:offline-preloaded` (or `asr-webservice:offline-gpu-preloaded`). `HF_TOKEN` is
+only ever passed as a runtime env var to the warm-up container, never baked into an image layer.
+
+Then export the committed image to a tar under `deploy/prod/dist/` for transfer:
+
+```bash
+./deploy/dev/scripts/offline/export-offline-image.sh          # CPU  -> deploy/prod/dist/whisper-asr-preloaded.tar
+./deploy/dev/scripts/offline/export-offline-image.sh gpu      # GPU  -> deploy/prod/dist/whisper-asr-preloaded-gpu.tar
+```
 
 ## 2. Transfer
 
@@ -39,7 +45,7 @@ into that environment.
 
 ```bash
 docker load -i whisper-asr-preloaded.tar
-docker compose -f scripts/offline/docker-compose.offline.yml up -d
+docker compose -f deploy/dev/scripts/offline/docker-compose.offline.yml up -d
 ```
 
 Edit `ASR_ENGINE`/`ASR_MODEL` in [docker-compose.offline.yml](docker-compose.offline.yml) first

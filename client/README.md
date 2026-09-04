@@ -12,14 +12,14 @@ python -m venv .venv && source .venv/bin/activate   # optional
 pip install -r requirements.txt
 ```
 
-Or skip the manual venv/install steps with `./scripts/python-start.sh` (run from the repo
+Or skip the manual venv/install steps with `./deploy/dev/scripts/python-start.sh` (run from the repo
 root) — it creates/reuses `client/.venv`, (re)installs `client/requirements.txt` only when it
 has changed, and runs the client. It's the fastest way to iterate locally (no Docker
 build/startup):
 
 ```shell
-./scripts/python-start.sh
-./scripts/python-start.sh --config other.yaml   # extra args are forwarded
+./deploy/dev/scripts/python-start.sh
+./deploy/dev/scripts/python-start.sh --config other.yaml   # extra args are forwarded
 ```
 
 Make sure an asr-webservice instance is running (see the repo root [README.md](../README.md)),
@@ -60,9 +60,9 @@ it, transcribe everything in `audio/`) can be run with one command from the repo
 
 ```shell
 # copy .env.example to .env first if you need HF_TOKEN or other overrides
-./scripts/docker-rebuild.sh      # build/refresh images (first run, or after changes)
-./scripts/docker-start.sh        # CPU
-./scripts/docker-start.sh gpu    # GPU
+./deploy/dev/scripts/docker-rebuild.sh      # build/refresh images (first run, or after changes)
+./deploy/dev/scripts/docker-start.sh        # CPU
+./deploy/dev/scripts/docker-start.sh gpu    # GPU
 ```
 
 `docker-start` starts the `asr-webservice` (or `-gpu`) service using whatever images
@@ -79,16 +79,16 @@ against `client/.docker-build-hash`) — so repeated runs are fast instead of re
 client image every time:
 
 ```shell
-./scripts/docker-rebuild.sh        # CPU compose project
-./scripts/docker-rebuild.sh gpu    # GPU compose project
+./deploy/dev/scripts/docker-rebuild.sh        # CPU compose project
+./deploy/dev/scripts/docker-rebuild.sh gpu    # GPU compose project
 ```
 
 To stop the service (and remove its containers/network — images and the cache volume are
 left in place):
 
 ```shell
-./scripts/docker-stop.sh        # CPU
-./scripts/docker-stop.sh gpu    # GPU
+./deploy/dev/scripts/docker-stop.sh        # CPU
+./deploy/dev/scripts/docker-stop.sh gpu    # GPU
 ```
 
 To run the client alone against an already-running service, without any rebuild check:

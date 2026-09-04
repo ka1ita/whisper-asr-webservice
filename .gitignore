@@ -5,6 +5,8 @@
 !/tests/**/*.egg
 /*.egg-info
 /dist/*
+/deploy/prod/dist/*
+!/deploy/prod/dist/.gitkeep
 build
 _build
 .cache

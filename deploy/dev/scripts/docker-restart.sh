@@ -5,11 +5,11 @@
 # because .env changed.
 #
 # Usage:
-#   ./scripts/docker-restart.sh            # CPU (docker-compose.yml)
-#   ./scripts/docker-restart.sh gpu        # GPU (docker-compose.gpu.yml)
+#   ./deploy/dev/scripts/docker-restart.sh            # CPU (docker-compose.yml)
+#   ./deploy/dev/scripts/docker-restart.sh gpu        # GPU (docker-compose.gpu.yml)
 set -euo pipefail
 
-repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
 cd "$repo_root"
 
 arg="${1:-}"

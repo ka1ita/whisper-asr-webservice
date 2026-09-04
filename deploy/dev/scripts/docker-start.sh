@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
 # Starts asr-webservice via docker compose (using whatever images already exist —
-# run ./scripts/docker-rebuild.sh first to build/refresh them), waits for it to become ready,
-# then runs the sample client (docker-compose.yml "client" service) against it.
+# run ./deploy/dev/scripts/docker-rebuild.sh first to build/refresh them), waits for it to
+# become ready, then runs the sample client (docker-compose.yml "client" service) against it.
 #
 # Usage:
-#   ./scripts/docker-start.sh            # CPU (docker-compose.yml)
-#   ./scripts/docker-start.sh gpu        # GPU (docker-compose.gpu.yml)
+#   ./deploy/dev/scripts/docker-start.sh            # CPU (docker-compose.yml)
+#   ./deploy/dev/scripts/docker-start.sh gpu        # GPU (docker-compose.gpu.yml)
 #
 # HF_TOKEN and other overrides: copy .env.example to .env and edit it first.
 set -euo pipefail
 
-repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
 cd "$repo_root"
 
 arg="${1:-}"

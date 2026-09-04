@@ -1,29 +1,27 @@
 #!/usr/bin/env bash
 # Builds an asr-webservice image with every model listed in warmup_models.py already
-# downloaded into /root/.cache, then saves it to a tar file for transfer to a server with no
-# internet access. On that server: `docker load -i <tar>` then run docker-compose.offline.yml.
+# downloaded into /root/.cache, then commits it to a preloaded image tag. Export the committed
+# image to a tar for transfer with ./deploy/dev/scripts/offline/export-offline-image.sh.
 #
 # Requires HF_TOKEN in the environment to download the gated pyannote models (whisperx
 # diarization, gigaam long-form VAD) - export it or `set -a; source .env; set +a` first.
 # Transcription-only models still download fine without it.
 #
 # Usage:
-#   ./scripts/offline/build-offline-image.sh            # CPU (Dockerfile)
-#   ./scripts/offline/build-offline-image.sh gpu        # GPU (Dockerfile.gpu)
+#   ./deploy/dev/scripts/offline/build-offline-image.sh            # CPU (Dockerfile)
+#   ./deploy/dev/scripts/offline/build-offline-image.sh gpu        # GPU (Dockerfile.gpu)
 set -euo pipefail
 
-repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)"
 cd "$repo_root"
 
 arg="${1:-}"
 
 dockerfile="Dockerfile"
 tag="asr-webservice:offline"
-out_file="whisper-asr-preloaded.tar"
 if [[ "$arg" == "gpu" ]]; then
   dockerfile="Dockerfile.gpu"
   tag="asr-webservice:offline-gpu"
-  out_file="whisper-asr-preloaded-gpu.tar"
 fi
 
 if [[ -z "${HF_TOKEN:-}" ]]; then
@@ -42,7 +40,7 @@ docker run -d --name "$container" --entrypoint sh -e "HF_TOKEN=${HF_TOKEN:-}" "$
 trap 'docker rm -f "$container" >/dev/null 2>&1 || true' EXIT
 
 echo "Copying warm-up script into container ..."
-docker cp "$repo_root/scripts/offline/warmup_models.py" "$container:/app/warmup_models.py"
+docker cp "$repo_root/deploy/dev/scripts/offline/warmup_models.py" "$container:/app/warmup_models.py"
 
 echo "Downloading models (this can take a while and pull tens of GB) ..."
 # Double leading slash survives Git Bash/MSYS path conversion (which would otherwise rewrite
@@ -55,10 +53,6 @@ docker exec "$container" du -sh //root/.cache
 echo "Committing warmed-up container to ${preloaded_tag} ..."
 docker commit "$container" "$preloaded_tag"
 
-echo "Saving image to ${out_file} ..."
-docker save "$preloaded_tag" -o "$out_file"
-
 echo ""
-echo "Done. Transfer ${out_file} to the isolated server, then:"
-echo "  docker load -i ${out_file}"
-echo "  docker compose -f scripts/offline/docker-compose.offline.yml up -d"
+echo "Done. Image ${preloaded_tag} is ready. Export it to a tar for transfer with:"
+echo "  ./deploy/dev/scripts/offline/export-offline-image.sh${arg:+ $arg}"
