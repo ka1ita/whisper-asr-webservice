@@ -26,8 +26,11 @@ export HF_TOKEN=hf_xxx   # needed for whisperx diarization + gigaam long-form VA
 
 This builds the normal image (as `asr-webservice:offline-base`), runs
 [warmup_models.py](warmup_models.py) inside a throwaway container to populate `/root/.cache`, and
-commits that container to `asr-webservice:offline` (or `asr-webservice:offline-gpu`). `HF_TOKEN` is
-only ever passed as a runtime env var to the warm-up container, never baked into an image layer.
+commits that container to `asr-webservice:offline` (or `asr-webservice:offline-gpu`) — restoring the
+`asr-webservice` entrypoint that the warm-up container's `sh -c "sleep infinity"` shell would
+otherwise leave baked into the image. `HF_TOKEN` is only ever passed to the model-download
+`docker exec`, never into the container config that `docker commit` snapshots, so it is not baked
+into the exported image.
 
 Then export the committed image to a tar under `deploy/prod/dist/` for transfer:
 

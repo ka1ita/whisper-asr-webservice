@@ -39,7 +39,10 @@ echo "Building base image ${base_tag} from ${dockerfile} ..."
 docker build -f "$dockerfile" -t "$base_tag" .
 
 echo "Starting warm-up container ${container} ..."
-docker run -d --name "$container" --entrypoint sh -e "HF_TOKEN=${HF_TOKEN:-}" "$base_tag" -c "sleep infinity"
+# No -e HF_TOKEN here: docker commit persists the container's runtime config - including
+# env vars set with `docker run -e` - into the committed image, which would bake the token
+# into the exported tar. HF_TOKEN is passed to the warm-up exec below instead.
+docker run -d --name "$container" --entrypoint sh "$base_tag" -c "sleep infinity"
 trap 'docker rm -f "$container" >/dev/null 2>&1 || true' EXIT
 
 echo "Copying warm-up script into container ..."
@@ -48,13 +51,24 @@ docker cp "$repo_root/deploy/dev/offline/warmup_models.py" "$container:/app/warm
 echo "Downloading models (this can take a while and pull tens of GB) ..."
 # Double leading slash survives Git Bash/MSYS path conversion (which would otherwise rewrite
 # these into Windows paths before they reach docker exec) - Linux collapses it back to one.
-docker exec "$container" //app/.venv/bin/python //app/warmup_models.py
+docker exec -e "HF_TOKEN=${HF_TOKEN:-}" "$container" //app/.venv/bin/python //app/warmup_models.py
 
 echo "Cache size:"
 docker exec "$container" du -sh //root/.cache
 
 echo "Committing warmed-up container to ${image} ..."
-docker commit "$container" "$image"
+# The warm-up container overrides the entrypoint with `sh -c "sleep infinity"`, and
+# docker commit bakes the container's runtime config into the image - without these
+# --change flags the committed image would sleep forever instead of starting the
+# webservice. Restore the ENTRYPOINT from Dockerfile / Dockerfile.gpu (keep in sync)
+# and clear CMD: the leftover `-c sleep infinity` args would be fed to the click CLI.
+docker commit \
+  --change 'ENTRYPOINT ["asr-webservice"]' \
+  --change 'CMD []' \
+  "$container" "$image"
+
+echo "Committed image runs:"
+docker image inspect -f '  Entrypoint: {{json .Config.Entrypoint}}  Cmd: {{json .Config.Cmd}}' "$image"
 
 echo ""
 echo "Done. Image ${image} is ready. Export it to a tar for transfer with:"

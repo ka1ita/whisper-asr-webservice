@@ -13,6 +13,10 @@ version: "3.4"
 services:
   asr-webservice:
     image: asr-webservice:offline
+    # Restore the webservice entrypoint: images committed by build-offline-image.sh before
+    # its docker-commit --change fix accidentally baked the warm-up container's
+    # `sh -c "sleep infinity"` into the image, so they slept instead of serving.
+    entrypoint: ["asr-webservice"]
     environment:
       - ASR_ENGINE=gigaam
       - ASR_MODEL=v3_ctc
