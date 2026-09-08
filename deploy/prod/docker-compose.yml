@@ -1,0 +1,39 @@
+# Fixed project name so the compose project doesn't depend on this folder's name on the
+# server (renaming the folder must not cause a second stack to be created next to the first).
+name: asr-webservice-prod
+
+# Runtime compose file for the isolated server. Uses the preloaded image produced by
+# deploy/dev/offline/build-offline-image.sh and transferred as a tar from deploy/prod/dist/
+# (run `docker load -i <tar>` first) instead of building from source, since the server has
+# no internet access. The service-* scripts in this directory wrap it — prefer those over
+# raw docker compose commands.
+#
+# Configuration (HF_TOKEN, ASR_ENGINE, ASR_MODEL, ASR_IMAGE) is read from a .env file next
+# to this compose file (docker compose picks it up from the compose file's directory
+# automatically); values set in the shell override it. No file edits needed.
+#
+# Deliberately does not mount the cache-whisper volume that the repo-root
+# docker-compose.yml uses for local dev - the models are already baked into the image at
+# /root/.cache, and mounting a named volume over that path would shadow them. See
+# deploy/dev/offline/README.md for details.
+services:
+  asr-webservice:
+    # Keep the default tag in sync with build-offline-image.sh / export-offline-image.sh.
+    # Set ASR_IMAGE=asr-webservice:offline-gpu in .env for the GPU variant.
+    image: ${ASR_IMAGE:-asr-webservice:offline}
+    # Restore the webservice entrypoint: images committed by build-offline-image.sh before
+    # its docker-commit --change fix accidentally baked the warm-up container's
+    # `sh -c "sleep infinity"` into the image, so they slept instead of serving.
+    entrypoint: ["asr-webservice"]
+    environment:
+      # Defaults below are just one of the combinations baked in by warmup_models.py -
+      # override either via .env to pick another (e.g. ASR_ENGINE=whisperx + large-v3).
+      - ASR_ENGINE=${ASR_ENGINE:-gigaam}
+      - ASR_MODEL=${ASR_MODEL:-v3_ctc}
+      - ASR_REQUEST_LOGGING=true
+      - HF_TOKEN=${HF_TOKEN:-}
+      - HF_HUB_DISABLE_TELEMETRY=true
+      - HF_HUB_OFFLINE=true
+    ports:
+      - "9000:9000"
+    restart: unless-stopped

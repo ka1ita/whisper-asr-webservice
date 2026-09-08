@@ -18,8 +18,8 @@ cd "$repo_root"
 
 arg="${1:-}"
 
-# Shared default image name - keep in sync with export-offline-image.sh and
-# docker-compose.offline.yml.
+# Shared default image name - keep in sync with export-offline-image.sh,
+# docker-compose.offline.yml, and deploy/prod/docker-compose.yml.
 dockerfile="Dockerfile"
 image="asr-webservice:offline"
 if [[ "$arg" == "gpu" ]]; then

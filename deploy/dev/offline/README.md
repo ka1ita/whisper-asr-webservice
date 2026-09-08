@@ -41,20 +41,32 @@ Then export the committed image to a tar under `deploy/prod/dist/` for transfer:
 
 ## 2. Transfer
 
-Copy the tar file to the isolated server (scp, USB, etc.) however you'd normally move files
-into that environment.
+Copy the tar file *and the `deploy/prod/` folder* to the isolated server (scp, USB, etc.)
+however you'd normally move files into that environment — `deploy/prod/` is the self-contained
+runtime for that server (its own compose file + service scripts).
 
 ## 3. Load and run on the isolated server
 
 ```bash
 docker load -i asr-webservice-preloaded.tar
+./deploy/prod/service-start.sh
+```
+
+See [deploy/prod/README.md](../../prod/README.md) for the full server-side story (config via a
+`.env` next to its compose file, stop/restart/logs scripts). Set `HF_TOKEN` there if you need
+diarization on that server too - the token is only used to satisfy the pyannote license check
+when loading an already-cached model, not to download anything.
+
+The rest of this section covers the underlying commands the scripts wrap. To run via compose
+directly (this dev-side compose file mirrors the prod one):
+
+```bash
 docker compose -f deploy/dev/offline/docker-compose.offline.yml up -d
 ```
 
 Edit `ASR_ENGINE`/`ASR_MODEL` in [docker-compose.offline.yml](docker-compose.offline.yml) first
 to pick one of the models baked in above. Set `HF_TOKEN` in the shell (or a `.env` file next to
-it) if you need diarization on that server too - the token is only used to satisfy the pyannote
-license check when loading an already-cached model, not to download anything.
+it).
 
 To run without compose instead:
 

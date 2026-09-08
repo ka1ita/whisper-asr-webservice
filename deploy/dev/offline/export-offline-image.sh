@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # Exports an already-built preloaded image (see build-offline-image.sh) to a tar file under
-# deploy/prod/dist/ for transfer to a server with no internet access. On that server:
+# deploy/prod/dist/ for transfer to a server with no internet access. On that server (copy
+# the deploy/prod/ folder over too - it holds the runtime compose file and service scripts):
 #   docker load -i deploy/prod/dist/<tar>
-#   docker compose -f deploy/dev/offline/docker-compose.offline.yml up -d
+#   ./deploy/prod/service-start.sh
 #
 # build-offline-image.sh builds and commits the preloaded image but does NOT write a tar;
 # run this script to export the committed image into deploy/prod/dist/.
@@ -18,8 +19,8 @@ cd "$repo_root"
 
 arg="${1:-}"
 
-# Shared default image name - keep in sync with build-offline-image.sh and
-# docker-compose.offline.yml.
+# Shared default image name - keep in sync with build-offline-image.sh,
+# docker-compose.offline.yml, and deploy/prod/docker-compose.yml.
 image="asr-webservice:offline"
 out_file="asr-webservice-preloaded.tar"
 case "$arg" in
@@ -47,6 +48,7 @@ echo "Exporting ${image} to ${out_path} ..."
 docker save "$image" -o "$repo_root/$out_path"
 
 echo ""
-echo "Done ($(du -h "$repo_root/$out_path" | cut -f1)). Transfer ${out_path} to the isolated server, then:"
+echo "Done ($(du -h "$repo_root/$out_path" | cut -f1)). Transfer ${out_path} (and deploy/prod/)"
+echo "to the isolated server, then:"
 echo "  docker load -i ${out_file}"
-echo "  docker compose -f deploy/dev/offline/docker-compose.offline.yml up -d"
+echo "  ./deploy/prod/service-start.sh"
