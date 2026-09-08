@@ -15,8 +15,13 @@ services:
     image: asr-webservice:offline
     environment:
       - ASR_ENGINE=gigaam
-      - ASR_MODEL=v3_e2e_rnnt
-      - HF_TOKEN=${HF_TOKEN:-}
+      - ASR_MODEL=v3_ctc
       - ASR_REQUEST_LOGGING=true
+      #- ASR_MODEL=v3_e2e_rnnt
+      #- ASR_ENGINE=whisperx
+      #- ASR_MODEL=tiny
+      - HF_TOKEN=${HF_TOKEN}
+      - HF_HUB_DISABLE_TELEMETRY=true
+      - HF_HUB_OFFLINE=true
     ports:
       - "9000:9000"

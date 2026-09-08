@@ -32,8 +32,8 @@ only ever passed as a runtime env var to the warm-up container, never baked into
 Then export the committed image to a tar under `deploy/prod/dist/` for transfer:
 
 ```bash
-./deploy/dev/scripts/offline/export-offline-image.sh          # CPU  -> deploy/prod/dist/whisper-asr-preloaded.tar
-./deploy/dev/scripts/offline/export-offline-image.sh gpu      # GPU  -> deploy/prod/dist/whisper-asr-preloaded-gpu.tar
+./deploy/dev/scripts/offline/export-offline-image.sh          # CPU  -> deploy/prod/dist/asr-webservice-preloaded.tar
+./deploy/dev/scripts/offline/export-offline-image.sh gpu      # GPU  -> deploy/prod/dist/asr-webservice-preloaded-gpu.tar
 ```
 
 ## 2. Transfer
@@ -44,7 +44,7 @@ into that environment.
 ## 3. Load and run on the isolated server
 
 ```bash
-docker load -i whisper-asr-preloaded.tar
+docker load -i asr-webservice-preloaded.tar
 docker compose -f deploy/dev/scripts/offline/docker-compose.offline.yml up -d
 ```
 

@@ -21,13 +21,13 @@ arg="${1:-}"
 # Shared default image name - keep in sync with build-offline-image.sh and
 # docker-compose.offline.yml.
 image="asr-webservice:offline"
-out_file="whisper-asr-preloaded.tar"
+out_file="asr-webservice-preloaded.tar"
 case "$arg" in
   ""|cpu)
     ;;
   gpu)
     image="asr-webservice:offline-gpu"
-    out_file="whisper-asr-preloaded-gpu.tar"
+    out_file="asr-webservice-preloaded-gpu.tar"
     ;;
   *)
     image="$arg"
