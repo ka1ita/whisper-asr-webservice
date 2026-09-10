@@ -25,12 +25,12 @@ services:
       #- ASR_MODEL=tiny
       - HF_TOKEN=${HF_TOKEN}
       - HF_HUB_DISABLE_TELEMETRY=true
-      - HF_HUB_OFFLINE=true
+      #- HF_HUB_OFFLINE=true
     ports:
       - "9000:9000"
     volumes:
       - ./app:/app/app
-      - cache-whisper:/root/.cache
+      - asr_webservice_cache:/root/.cache
 
   client:
     build:
@@ -42,11 +42,8 @@ services:
     environment:
       - ASR_CLIENT_SERVER_URL=http://asr-webservice-gpu:9000
       - ASR_CLIENT_AUDIO_DIR=/audio
-      - HF_TOKEN=${HF_TOKEN}
-      - HF_HUB_DISABLE_TELEMETRY=true
-      - HF_HUB_OFFLINE=true
     volumes:
       - ./audio:/audio
 
 volumes:
-  cache-whisper:
+  asr_webservice_cache:

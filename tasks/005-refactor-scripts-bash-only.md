@@ -51,7 +51,7 @@ Refactor [`scripts/`](../scripts/): drop the PowerShell (`.ps1`) variants and ke
   `--build`: starts the service from whatever images already exist, waits for readiness, runs
   the client.
 - [`scripts/docker-stop.sh`](../scripts/docker-stop.sh) — new; `docker compose down` (stops
-  containers/network, leaves images and the `cache-whisper` volume in place).
+  containers/network, leaves images and the `asr_webservice_cache` volume in place).
 - [`scripts/python-start.sh`](../scripts/python-start.sh) — straight rename of
   `start-client.sh`, behavior unchanged.
 - Deleted `start-docker.sh`, `rebuild-client.sh`, `start-client.sh` and all `.ps1`

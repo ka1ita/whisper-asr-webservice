@@ -81,7 +81,7 @@ docker run -d -p 9000:9000 \
 Edit the constants in `warmup_models.py`, then rerun `build-offline-image.sh` and repeat the
 transfer - there's no incremental update path, the whole image gets rebuilt and re-shipped.
 
-## Why not the `cache-whisper` volume from docker-compose.yml?
+## Why not the `asr_webservice_cache` volume from docker-compose.yml?
 
 The main `docker-compose.yml` mounts a named volume at `/root/.cache` for local dev, so model
 downloads survive container recreation without bloating the dev image. `docker-compose.offline.yml`

@@ -12,7 +12,7 @@ name: asr-webservice-prod
 # to this compose file (docker compose picks it up from the compose file's directory
 # automatically); values set in the shell override it. No file edits needed.
 #
-# Deliberately does not mount the cache-whisper volume that the repo-root
+# Deliberately does not mount the asr_webservice_cache volume that the repo-root
 # docker-compose.yml uses for local dev - the models are already baked into the image at
 # /root/.cache, and mounting a named volume over that path would shadow them. See
 # deploy/dev/offline/README.md for details.

@@ -4,7 +4,7 @@ version: "3.4"
 # build-offline-image.sh (docker load -i <tar> first) instead of building from source,
 # since the isolated server has no internet access.
 #
-# Deliberately does not mount the cache-whisper volume that docker-compose.yml uses for
+# Deliberately does not mount the asr_webservice_cache volume that docker-compose.yml uses for
 # local dev - the models are already baked into the image at /root/.cache, and mounting an
 # empty named volume over that path on a host where it was created previously (e.g. by an
 # earlier plain docker run) would shadow them. See README.md for details.

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Stops the asr-webservice docker compose service and removes its containers/network
-# (images and the cache-whisper volume are left in place — rerun docker-start.sh to bring it
+# (images and the asr_webservice_cache volume are left in place — rerun docker-start.sh to bring it
 # back up without rebuilding).
 #
 # Usage:
