@@ -1,4 +1,7 @@
 .git
 .venv
 venv
-deploy/prod/dist
+deploy
+audio
+tasks
+client
